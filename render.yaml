@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: hisab-backend
+    env: node
+    plan: free
+    branch: main
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      - key: PORT
+        value: "10000" # Render injects PORT environment variable automatically but you can specify default
