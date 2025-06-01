@@ -72,32 +72,17 @@ const addBookingToTeam = async (req, res) => {
     const { teamName } = req.params;
     const newBooking = req.body;
 
-    const normalize = (str) => (str || "").trim().toLowerCase();
-
     const team = await bookingData.findOne({
-      teamName: { $regex: new RegExp(`^${teamName.trim()}$`, "i") },
+      teamName: { $regex: new RegExp(`^${teamName}$`, "i") },
     });
-
     if (!team) {
       return res.status(404).json({ message: "Team not found" });
-    }
-
-    const isDuplicate = team.bookings.some(
-      (booking) =>
-        normalize(booking.date) === normalize(newBooking.date) &&
-        normalize(booking.time) === normalize(newBooking.time)
-    );
-
-    if (isDuplicate) {
-      return res.status(409).json({
-        message: `Duplicate booking for date ${newBooking.date} and time ${newBooking.time} already exists.`,
-      });
     }
 
     team.bookings.push(newBooking);
     await team.save();
 
-    res.status(200).json({ message: "Booking added successfully", team });
+    res.status(200).json(team);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
