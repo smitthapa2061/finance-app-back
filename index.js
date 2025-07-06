@@ -15,7 +15,7 @@ app.use("/api/bookingData", bookingRoute);
 // POST /api/teams
 
 const mongoURI =
-  "mongodb+srv://smit:yO6BPguwc6xt9kfQ@cluster0.fmsvs1i.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://smith:smiththapa121@cluster0.8gt3ica.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose
   .connect(mongoURI)
