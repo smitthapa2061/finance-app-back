@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const bookingDataSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "User ID is required"],
+    },
     teamName: {
       type: String,
       required: [true, "Team name is required"],
@@ -51,6 +56,10 @@ const bookingDataSchema = new mongoose.Schema(
         productionCost: {
           type: Number,
           required: [false],
+        },
+        paid: {
+          type: Boolean,
+          default: false, // Default is unpaid
         },
       },
     ],

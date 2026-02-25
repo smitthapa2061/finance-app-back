@@ -3,17 +3,22 @@ const bookingData = require("../models/booking.model.js");
 const createTeam = async (req, res) => {
   try {
     const { teamName } = req.body;
+    const userId = req.userId;
 
-    // Check if team already exists
+    // Check if team already exists for this user
     const existing = await bookingData.findOne({
       teamName: { $regex: new RegExp(`^${teamName}$`, "i") },
+      userId: userId,
     });
 
     if (existing) {
       return res.status(400).json({ message: "Team already exists" });
     }
 
-    const newTeam = await bookingData.create(req.body);
+    const newTeam = await bookingData.create({
+      ...req.body,
+      userId: userId,
+    });
     res.status(200).json(newTeam);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -22,7 +27,8 @@ const createTeam = async (req, res) => {
 
 const findTeams = async (req, res) => {
   try {
-    const teams = await bookingData.find(req.body);
+    const userId = req.userId;
+    const teams = await bookingData.find({ userId: userId });
     res.status(200).json(teams);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -32,9 +38,11 @@ const findTeams = async (req, res) => {
 const deleteTeam = async (req, res) => {
   try {
     const { teamName } = req.params;
+    const userId = req.userId;
 
     const deletedTeam = await bookingData.findOneAndDelete({
       teamName: { $regex: new RegExp(`^${teamName}$`, "i") },
+      userId: userId,
     });
 
     if (!deletedTeam) {
@@ -50,9 +58,10 @@ const deleteTeam = async (req, res) => {
 const updateTeam = async (req, res) => {
   try {
     const { teamName } = req.params;
+    const userId = req.userId;
 
     const updatedTeam = await bookingData.findOneAndUpdate(
-      { teamName: { $regex: new RegExp(`^${teamName}$`, "i") } },
+      { teamName: { $regex: new RegExp(`^${teamName}$`, "i") }, userId: userId },
       req.body,
       { new: true }
     );
@@ -71,9 +80,11 @@ const addBookingToTeam = async (req, res) => {
   try {
     const { teamName } = req.params;
     const newBooking = req.body;
+    const userId = req.userId;
 
     const team = await bookingData.findOne({
       teamName: { $regex: new RegExp(`^${teamName}$`, "i") },
+      userId: userId,
     });
     if (!team) {
       return res.status(404).json({ message: "Team not found" });
@@ -92,9 +103,11 @@ const updateBookingInTeam = async (req, res) => {
   try {
     const { teamName, bookingIndex } = req.params;
     const updatedBooking = req.body;
+    const userId = req.userId;
 
     const team = await bookingData.findOne({
       teamName: { $regex: new RegExp(`^${teamName}$`, "i") },
+      userId: userId,
     });
     if (!team) {
       return res.status(404).json({ message: "Team not found" });
@@ -125,9 +138,11 @@ const updateBookingInTeam = async (req, res) => {
 const deleteBookingFromTeam = async (req, res) => {
   try {
     const { teamName, bookingIndex } = req.params;
+    const userId = req.userId;
 
     const team = await bookingData.findOne({
       teamName: { $regex: new RegExp(`^${teamName}$`, "i") },
+      userId: userId,
     });
     if (!team) {
       return res.status(404).json({ message: "Team not found" });

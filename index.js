@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const bookingRoute = require("./route/bookingData.route.js");
+const authRoute = require("./route/auth.route.js");
 const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,12 +11,16 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 app.use(express.json());
 app.use(cors());
 
+// Auth routes (public)
+app.use("/api/auth", authRoute);
+
+// Booking routes
 app.use("/api/bookingData", bookingRoute);
 
 // POST /api/teams
 
 const mongoURI =
-  "mongodb+srv://yash:l5ID3J4CM47B6OoU@cluster0.fmsvs1i.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://smith1221smit_db_user:PtOpVyKlijGWVAjY@cluster0.sxhdbp0.mongodb.net/?appName=Cluster0";
 
 
 
