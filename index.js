@@ -21,7 +21,7 @@ app.use("/api/bookingData", bookingRoute);
 
 // MongoDB Connection - Using standard mongodb protocol with explicit options
 // to avoid DNS SRV lookup issues
-const mongoURI = process.env.MONGO_URI;
+const mongoURI = process.env.MONGO_URI || "mongodb+srv://newuser:ZQDMowvD4D3quxHO@cluster0.dazmsmn.mongodb.net/?appName=Cluster0";
 
 mongoose
   .connect(mongoURI, {
