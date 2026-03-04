@@ -1,6 +1,8 @@
 const express = require("express");
+const dns = require("dns");
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 const mongoose = require("mongoose");
-
+require("dotenv").config();
 const bookingRoute = require("./route/bookingData.route.js");
 const authRoute = require("./route/auth.route.js");
 const cors = require("cors");
@@ -17,19 +19,19 @@ app.use("/api/auth", authRoute);
 // Booking routes
 app.use("/api/bookingData", bookingRoute);
 
-// POST /api/teams
-
-const mongoURI =
-  "mongodb+srv://smith1221smit_db_user:PtOpVyKlijGWVAjY@cluster0.sxhdbp0.mongodb.net/?appName=Cluster0";
-
-
+// MongoDB Connection - Using standard mongodb protocol with explicit options
+// to avoid DNS SRV lookup issues
+const mongoURI = process.env.MONGO_URI;
 
 mongoose
-  .connect(mongoURI)
+  .connect(mongoURI, {
+    serverSelectionTimeoutMS: 30000,
+    socketTimeoutMS: 45000,
+  })
   .then(() => {
-    console.log("Successfully connected  to MongoDB");
+    console.log("Successfully connected to MongoDB");
   })
   .catch((err) => {
     console.error("Connection error:", err.message);
-    // Optionally: process.exit(1) to crash the app if  DB is essential
+    console.error("Full error:", err);  
   });
