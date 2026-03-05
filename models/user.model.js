@@ -14,6 +14,22 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
+  textField1: {
+    type: String,
+    default: "",
+  },
+  textField2: {
+    type: String,
+    default: "",
+  },
+  textField3: {
+    type: String,
+    default: "",
+  },
+  textField4: {
+    type: String,
+    default: "",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
